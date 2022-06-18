@@ -11,6 +11,7 @@ class PetNftService {
   }
 
   async createToDb (pet) {
+    pet['owner_address'] = pet['owner_address'].toLowerCase()
     const newPet = new PetNftModel(pet)
     await newPet.save()
     return newPet
