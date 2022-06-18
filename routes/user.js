@@ -9,7 +9,7 @@ router.get('/get-by-id', userController.getById)
 
 router.post('/create', userController.create)
 
-router.put('/update', userController.update)
+router.put('/update/:id', authenToken, userController.update)
 
 router.delete('/delete', userController.delete)
 

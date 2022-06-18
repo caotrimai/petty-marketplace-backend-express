@@ -28,19 +28,6 @@ class PetNftController {
     }
   }
   
-  // [POST] /create
-  async create (req, res) {
-    try {
-      const pet = await petNftService.create(req.body)
-      res.status(200).json(pet)
-    } catch (err) {
-      console.log(err)
-      res.status(500).json({
-        error: err
-      })
-    }
-  }
-  
   // [PUT] /update
   async update (req, res) {
     try {
@@ -67,20 +54,18 @@ class PetNftController {
     }
   }
   
-  // [POST] /generate
-  async genPetNft (req, res) {
+  // [POST] /create
+  async create (req, res) {
     if(req.auth.role !== 'admin') {
       res.status(403).json({message: 'Forbidden'})
     }
+    const pet = req.body
     try {
-      const body = req.body
-      // if(!pet) {
-      //   res.status(400).json({error: 'Invalid request'})
-      // }
-      console.log(req.body)
-      console.log(req.params)
-      // await petNftService.genPetNft(pet)
-      res.status(200).json({message: 'Mint nft success. Please wait to DB sync to blockchain'})
+      if(!pet) {
+        res.status(400).json({error: 'Invalid request'})
+      }
+      await petNftService.create(pet)
+      res.status(200).json({message: 'Mint nft success.'})
     } catch (err) {
       res.status(500).json({error: err.message})
     }

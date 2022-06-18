@@ -10,7 +10,7 @@ class PetNftService {
     return PetNftModel.findById(id)
   }
 
-  async create (pet) {
+  async createToDb (pet) {
     const newPet = new PetNftModel(pet)
     await newPet.save()
     return newPet
@@ -28,7 +28,7 @@ class PetNftService {
     return ['fire', 'water', 'plant']
   }
 
-  async genPetNft (petty) {
+  async create (petty) {
     try {
       const adminAddress = process.env.ADMIN_PUBLIC_KEY
       await PettyContract.methods.mint(adminAddress).send({
@@ -41,7 +41,7 @@ class PetNftService {
           nft_id: tokenId,
           owner_address: adminAddress,
         }
-        await this.create(newPet)
+        await this.createToDb(newPet)
       }).on('error', function (error) {
         throw new Error(error)
       })

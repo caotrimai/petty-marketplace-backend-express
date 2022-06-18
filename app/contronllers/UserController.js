@@ -17,6 +17,7 @@ class UserController {
   async getById (req, res) {
     try {
       const user = await userService.getById(req.params.id)
+      delete user['password']
       res.status(200).json(user)
     } catch (err) {
       console.log(err)
@@ -35,11 +36,17 @@ class UserController {
     }
   }
 
-  // [PUT] /update
+  // [PUT] /update/:id
   async update (req, res) {
+    const id = req.params.id
+    const updatedUser = req.body
     try {
-      const user = await userService.update(req.params.id, req.body)
-      res.status(200).json(user)
+      if(id === updatedUser['_id'] && req.auth.userId === updatedUser['_id']) {
+        const user = await userService.update(id, updatedUser)
+        res.status(200).json(user)
+      } else {
+        res.status(403).json({message: 'Forbidden'})
+      }
     } catch (err) {
       console.log(err)
       res.status(500).json({error: err.message})

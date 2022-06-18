@@ -10,7 +10,7 @@ const petNftSchema = new mongoose.Schema({
   name: {type: String},
   gender: {type: String, enum: GENDERS, default: GENDERS[0]},
   element: {type: String, enum: ELEMENTS, default: ELEMENTS[0]},
-  image: Buffer,
+  image: String,
   stats_hp: {type: Number, default: 0},
   stats_attack: {type: Number, default: 0},
   description: {type: String},
