@@ -3,7 +3,9 @@ const router = express.Router()
 const eventController = require('../app/contronllers/EventController')
 
 
-router.post('/:eventName', eventController.handleGotEvent)
+router.post('/marketplace/:eventName', eventController.handleMarketplaceEvent)
+
+router.post('/petty/:eventName', eventController.handlePettyEvent)
 
 
 module.exports = router;

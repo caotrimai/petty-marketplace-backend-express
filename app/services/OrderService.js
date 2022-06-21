@@ -55,7 +55,7 @@ class OrderService {
     return OrderTransaction.findByIdAndUpdate(orderTx._id, {canceled: true}, {new: true})
   }
 
-  handleGotEvent = async (eventName, event) => {
+  handleMarketplaceEvent = async (eventName, event) => {
     if (!eventName || !event) {
       console.log('eventName and event is required')
       throw new Error('eventName and event is required')

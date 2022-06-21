@@ -1,4 +1,5 @@
 const petNftService = require('../services/PetNftService')
+const {web3} = require('../commons/contract')
 
 class PetNftController {
 
@@ -74,7 +75,8 @@ class PetNftController {
   // [GET] /get-by-owner
   async getByOwner (req, res) {
     try {
-      if(!req.query.owner) {
+      const isValid = web3.utils.isAddress(req.query.owner)
+      if(!isValid) {
         res.status(400).json({error: 'Invalid request'})
       }
       console.log(req.query.owner)

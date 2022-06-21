@@ -1,5 +1,6 @@
 const PetNftModel = require('../models/PetNftModel')
 const {PettyContract} = require('../commons/contract')
+const pettyEvent = require('../models/PettyEvent')
 
 class PetNftService {
   async getAll () {
@@ -50,9 +51,34 @@ class PetNftService {
       throw new Error(err)
     }
   }
-  
+
   getByOwner (ownerAddress) {
     return PetNftModel.find({owner_address: ownerAddress.toLowerCase()})
+  }
+
+  getByTokenId (tokenId) {
+    return PetNftModel.findOne({nft_id: tokenId})
+  }
+
+  handleEventTransfer = async (eventData) => {
+    const {to, tokenId} = eventData
+    const pet = await this.getByTokenId(tokenId)
+    return PetNftModel.findByIdAndUpdate(pet._id,
+      {owner_address: to.toLowerCase()}, {new: true})
+  }
+
+  handlePettyEvent = async (eventName, event) => {
+    if (!eventName || !event) {
+      console.log('eventName and event is required')
+      throw new Error('eventName and event is required')
+    }
+    switch (eventName) {
+      case pettyEvent.TRANSFER:
+        await this.handleEventTransfer(event)
+        break
+      default:
+        break
+    }
   }
 }
 
