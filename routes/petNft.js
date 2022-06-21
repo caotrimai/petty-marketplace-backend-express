@@ -14,5 +14,7 @@ router.put('/update', petNftController.update)
 
 router.delete('/delete', petNftController.delete)
 
+router.get('/get-by-owner', petNftController.getByOwner)
+
 
 module.exports = router;

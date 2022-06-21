@@ -71,6 +71,21 @@ class PetNftController {
     }
   }
   
+  // [GET] /get-by-owner
+  async getByOwner (req, res) {
+    try {
+      if(!req.query.owner) {
+        res.status(400).json({error: 'Invalid request'})
+      }
+      console.log(req.query.owner)
+      const pets = await petNftService.getByOwner(req.query.owner)
+      res.status(200).json(pets)
+    } catch (err) {
+      console.log(err)
+      res.status(500).json({error: err})
+    }
+  }
+  
 }
 
 module.exports = new PetNftController()

@@ -32,7 +32,7 @@ class PetNftService {
   async create (petty) {
     try {
       const adminAddress = process.env.ADMIN_PUBLIC_KEY
-      await PettyContract.methods.mint(adminAddress).send({
+      await PettyContract.methods.mint(adminAddress.toLowerCase()).send({
         from: adminAddress,
       }).on('receipt', async (receipt) => {
         const {tokenId} = receipt.events.Transfer.returnValues
@@ -49,6 +49,10 @@ class PetNftService {
     } catch (err) {
       throw new Error(err)
     }
+  }
+  
+  getByOwner (ownerAddress) {
+    return PetNftModel.find({owner_address: ownerAddress.toLowerCase()})
   }
 }
 
