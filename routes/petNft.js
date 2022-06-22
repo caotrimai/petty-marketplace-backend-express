@@ -16,5 +16,7 @@ router.delete('/delete', petNftController.delete)
 
 router.get('/get-by-owner', petNftController.getByOwner)
 
+router.get('/image', petNftController.getImage)
+
 
 module.exports = router;

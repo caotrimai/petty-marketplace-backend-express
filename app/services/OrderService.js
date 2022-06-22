@@ -1,7 +1,12 @@
 const marketPlaceEvent = require('../models/MarketPlaceEvent')
+const pettyNftService = require('../services/PetNftService')
 const OrderTransaction = require('../models/OrderTransactionModel')
 
 class OrderService {
+  
+  async getSellingOrders () {
+    return OrderTransaction.find({canceled: false})
+  }
 
   formatEvent = (event) => {
     const eventData = {
@@ -13,10 +18,6 @@ class OrderService {
     }
     if (event['seller']) {
       eventData['seller'] = event['seller'].toLowerCase()
-    }
-    if (event['tokenId']) {
-      eventData['token_id'] = event['tokenId']
-      delete eventData['tokenId']
     }
     if (event['buyer']) {
       eventData['buyer'] = event['buyer'].toLowerCase()
@@ -38,6 +39,7 @@ class OrderService {
 
   handleEventOrderAdded = async (event) => {
     const eventData = this.formatEvent(event)
+    eventData.nft = await pettyNftService.getByTokenId(eventData.tokenId)
     const orderTx = new OrderTransaction(eventData)
     await orderTx.save()
     return orderTx
@@ -77,5 +79,5 @@ class OrderService {
 
 }
 
-const marketPlaceService = new OrderService()
-module.exports = marketPlaceService
+const orderService = new OrderService()
+module.exports = orderService

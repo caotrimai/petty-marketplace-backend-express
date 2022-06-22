@@ -26,6 +26,14 @@ class PetNftService {
     return PetNftModel.findByIdAndDelete(id)
   }
 
+  getByOwner (ownerAddress) {
+    return PetNftModel.find({owner_address: ownerAddress.toLowerCase()})
+  }
+
+  getByTokenId (tokenId) {
+    return PetNftModel.findOne({nft_id: tokenId})
+  }
+  
   getPetElements () {
     return ['fire', 'water', 'plant']
   }
@@ -51,15 +59,7 @@ class PetNftService {
       throw new Error(err)
     }
   }
-
-  getByOwner (ownerAddress) {
-    return PetNftModel.find({owner_address: ownerAddress.toLowerCase()})
-  }
-
-  getByTokenId (tokenId) {
-    return PetNftModel.findOne({nft_id: tokenId})
-  }
-
+  
   handleEventTransfer = async (eventData) => {
     const {to, tokenId} = eventData
     const pet = await this.getByTokenId(tokenId)
