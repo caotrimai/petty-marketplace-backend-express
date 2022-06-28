@@ -2,10 +2,23 @@ const marketPlaceEvent = require('../models/MarketPlaceEvent')
 const pettyNftService = require('../services/PetNftService')
 const OrderTransaction = require('../models/OrderTransactionModel')
 
+const ADDRESS0 = '0x0000000000000000000000000000000000000000'
+
 class OrderService {
-  
-  async getSellingOrders () {
-    return OrderTransaction.find({canceled: false})
+  PER_PAGE = 10
+  PAGE = 0
+
+  async getSellingOrders ({
+    seller,
+    buyer = ADDRESS0,
+    perPage = this.PER_PAGE,
+    page = this.PAGE,
+  }) {
+    const filter = {buyer, canceled: false}
+    if(seller) {
+      filter.seller = seller
+    }
+    return OrderTransaction.find(filter).limit(perPage).skip(perPage * page)
   }
 
   formatEvent = (event) => {
@@ -54,7 +67,8 @@ class OrderService {
 
   handleEventOrderCanceled = async (oderId) => {
     const orderTx = await OrderTransaction.findOne({oder_id: oderId})
-    return OrderTransaction.findByIdAndUpdate(orderTx._id, {canceled: true}, {new: true})
+    return OrderTransaction.findByIdAndUpdate(orderTx._id, {canceled: true},
+      {new: true})
   }
 
   handleMarketplaceEvent = async (eventName, event) => {

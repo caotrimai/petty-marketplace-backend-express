@@ -1,10 +1,11 @@
 const orderService = require('../services/OrderService');
 
 class OrderController {
-  //[GET] /get-all
+  //[GET] /selling
   async getSellingOrders (req, res) {
     try {
-      const orders = await orderService.getSellingOrders()
+      const filter = req.query;
+      const orders = await orderService.getSellingOrders(filter)
       res.status(200).json(orders)
     } catch (err) {
       console.log(err)

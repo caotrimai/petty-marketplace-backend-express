@@ -6,7 +6,8 @@ class PetNftController {
   // [GET] /get-all
   async getAll (req, res) {
     try {
-      const pets = await petNftService.getAll()
+      const {perPage,  page} = req.params
+      const pets = await petNftService.getAll(perPage,  page)
       res.status(200).json(pets)
     } catch (err) {
       console.log(err)
@@ -72,15 +73,16 @@ class PetNftController {
     }
   }
 
-  // [GET] /get-by-owner
+  // [GET] /:owner
   async getByOwner (req, res) {
     try {
-      const isValid = web3.utils.isAddress(req.query.owner)
+      const owner = req.params.owner
+      const isValid = web3.utils.isAddress(owner)
       if (!isValid) {
-        res.status(400).json({error: 'Invalid request'})
+        return res.status(400).json({error: 'Invalid address'})
       }
-      const pets = await petNftService.getByOwner(req.query.owner)
-      res.status(200).json(pets)
+      const pets = await petNftService.getByOwner(owner)
+      return res.status(200).json(pets)
     } catch (err) {
       console.log(err)
       res.status(500).json({error: err})

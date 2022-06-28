@@ -3,8 +3,15 @@ const {PettyContract} = require('../commons/contract')
 const pettyEvent = require('../models/PettyEvent')
 
 class PetNftService {
-  async getAll () {
-    return PetNftModel.find()
+  PER_PAGE = 10
+  PAGE = 0
+  
+  async getAll (perPage = this.PER_PAGE,  page = this.PAGE) {
+    return PetNftModel.find().limit(perPage).skip(perPage * page)
+  }
+  
+  async getByOwner(owner) {
+    return PetNftModel.find({owner_address: owner.toLowerCase()})
   }
 
   async getById (id) {
@@ -24,10 +31,6 @@ class PetNftService {
 
   async delete (id) {
     return PetNftModel.findByIdAndDelete(id)
-  }
-
-  getByOwner (ownerAddress) {
-    return PetNftModel.find({owner_address: ownerAddress.toLowerCase()})
   }
 
   getByTokenId (tokenId) {
