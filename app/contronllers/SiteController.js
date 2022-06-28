@@ -2,7 +2,7 @@ class SiteController {
 
   // [GET] /
   index(req, res) {
-    res.send("Express on Vercel");
+    return res.send("Express on Vercel");
   }
 }
 

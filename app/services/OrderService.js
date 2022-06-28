@@ -1,6 +1,6 @@
-const marketPlaceEvent = require('../models/MarketPlaceEvent')
-const pettyNftService = require('../services/PetNftService')
-const OrderTransaction = require('../models/OrderTransactionModel')
+const marketPlaceEvent = require('../models/MarketPlaceEvent.js')
+const pettyNftService = require('../services/PetNftService.js')
+const OrderTransaction = require('../models/OrderTransactionModel.js')
 
 const ADDRESS0 = '0x0000000000000000000000000000000000000000'
 
