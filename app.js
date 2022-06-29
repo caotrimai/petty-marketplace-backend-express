@@ -1,4 +1,5 @@
 require('dotenv').config()
+const http = require('http')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const createError = require('http-errors')
@@ -6,37 +7,31 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
-const mongoose = require('mongoose')
+const mongo = require('./configs/database/mongo')
+const utils = require('./app/commons/utils')
+const serverSocket = require('./app/contronllers/SocketHandler')
 const handleRoute = require('./routes/index')
 
 const app = express()
+const server = http.createServer(app)
 
-const port = process.env.PORT || '8000'
-app.set('port', port);
+const port = utils.normalizePort(process.env.PORT || '8000')
+app.set('port', port)
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'))
-app.set('view engine', 'jade')
-
-app.use(cors({  'origin': '*'}))
+// app.use(cors({'origin': '*'}))
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(logger('dev'))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// connect to mongoDB
-mongoose.connect(process.env.MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('Connected to MongoDB')
-}).catch((err) => {
-  console.log('err', err)
-})
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 
 // init Routes
 handleRoute(app)
+//connect DB
+mongo.connectDB()
+// init Socket
+serverSocket.setServer(server)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -51,11 +46,11 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.send("Error: " + err.message);
+  res.send('Error: ' + err.message)
 })
 
-app.listen(8000, () => {
-  console.log("Running on port 8000.");
-});
+server.listen(port, () => {
+  console.log(`Running on port ${port}`)
+})
 
-module.exports = app
+module.exports = server

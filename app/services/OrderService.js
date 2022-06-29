@@ -1,6 +1,7 @@
 const marketPlaceEvent = require('../models/MarketPlaceEvent')
 const pettyNftService = require('../services/PetNftService')
 const OrderTransaction = require('../models/OrderTransactionModel')
+const serverSocket = require('../contronllers/SocketHandler')
 
 const ADDRESS0 = '0x0000000000000000000000000000000000000000'
 
@@ -55,20 +56,24 @@ class OrderService {
     eventData.nft = await pettyNftService.getByTokenId(eventData.tokenId)
     const orderTx = new OrderTransaction(eventData)
     await orderTx.save()
+    serverSocket.getSocket().emit('ORDER_ADDED', eventData)
     return orderTx
   }
 
   handleEventOrderMatched = async (event) => {
-    const orderTx = await OrderTransaction.findOne({oder_id: event.oderId})
+    const orderTx = await OrderTransaction.findOne({order_id: event.orderId})
     const id = orderTx._id
     const eventData = this.formatEvent(event)
+    serverSocket.getSocket().emit('ORDER_MATCHED', eventData)
     return OrderTransaction.findByIdAndUpdate(id, eventData, {new: true})
   }
 
-  handleEventOrderCanceled = async (oderId) => {
-    const orderTx = await OrderTransaction.findOne({oder_id: oderId})
-    return OrderTransaction.findByIdAndUpdate(orderTx._id, {canceled: true},
+  handleEventOrderCanceled = async (orderId) => {
+    const orderTx = await OrderTransaction.findOne({order_id: orderId})
+    const cancelTx = OrderTransaction.findByIdAndUpdate(orderTx._id, {canceled: true},
       {new: true})
+    serverSocket.getSocket().emit('ORDER_CANCELED', orderTx['_id'])
+    return cancelTx
   }
 
   handleMarketplaceEvent = async (eventName, event) => {
@@ -84,7 +89,7 @@ class OrderService {
         await this.handleEventOrderMatched(event)
         break
       case marketPlaceEvent.ORDER_CANCELED:
-        await this.handleEventOrderCanceled(event.oderId)
+        await this.handleEventOrderCanceled(event.orderId)
         break
       default:
         break
