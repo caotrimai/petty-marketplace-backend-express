@@ -1,3 +1,4 @@
+const logger = require('../commons/logger')
 const { PettyContract} = require('../commons/contract')
 
 class ContractService{
@@ -8,10 +9,10 @@ class ContractService{
     })
     .on('receipt', function(receipt){
       const {to, tokenId} = receipt.events.Transfer.returnValues
-      console.log(`Mint success: ${to} ${tokenId}`)
+      logger.info(`Mint success: ${to} ${tokenId}`)
     })
     .on('error', function(error){
-      console.log(error);
+      logger.error(error)
     })
   }
   

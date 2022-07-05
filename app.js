@@ -6,7 +6,7 @@ const createError = require('http-errors')
 const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
-const logger = require('morgan')
+const logger = require('./app/commons/logger')
 const mongo = require('./configs/database/mongo')
 const utils = require('./app/commons/utils')
 const serverSocket = require('./app/contronllers/SocketHandler')
@@ -20,7 +20,6 @@ app.set('port', port)
 
 // app.use(cors({'origin': '*'}))
 app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
-app.use(logger('dev'))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json())
@@ -50,7 +49,7 @@ app.use(function (err, req, res, next) {
 })
 
 server.listen(port, () => {
-  console.log(`Running on port ${port}`)
+  logger.info(`Server is running on port ${port}`)  
 })
 
 module.exports = server

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const logger = require('../../app/commons/logger')
 
 class Mongo {
   connectDB () {
@@ -7,9 +8,9 @@ class Mongo {
       {useNewUrlParser: true, useUnifiedTopology: true},
       (err) => {
         if (err) {
-          console.log(err)
+          logger.error(err)
         } else {
-          console.log('MongoDB connected')
+          logger.info('MongoDB connected')
         }
       },
     )

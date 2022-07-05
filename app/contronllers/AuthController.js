@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken')
 const authService = require('../services/AuthService')
+const logger = require('../commons/logger')
 
 class AuthController {
   // [GET] /sign-message
@@ -8,6 +9,7 @@ class AuthController {
       let signMessage = await authService.getSignMessage(req.params.publicKey)
       res.status(200).json(signMessage)
     } catch (err) {
+      logger.error(err)
       res.status(500).json({error: err.message})
     }
   }
@@ -30,6 +32,7 @@ class AuthController {
       const accessToken = jwt.sign(tokenData, process.env.JWT_SECRET_KEY, {expiresIn: '7d'})
       res.status(200).json({accessToken})
     } catch (err) {
+      logger.error(err)
       res.status(500).json({error: err.message})
     }
   }

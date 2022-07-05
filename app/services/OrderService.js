@@ -78,7 +78,6 @@ class OrderService {
 
   handleMarketplaceEvent = async (eventName, event) => {
     if (!eventName || !event) {
-      console.log('eventName and event is required')
       throw new Error('eventName and event is required')
     }
     switch (eventName) {

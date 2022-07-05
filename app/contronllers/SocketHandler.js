@@ -1,4 +1,5 @@
 const {Server} = require('socket.io')
+const logger = require('../commons/logger')
 
 class SocketHandler {
   constructor (httpServer) {
@@ -15,10 +16,10 @@ class SocketHandler {
 
   listenEvents () {
     this.io.on('connection', (socket) => {
-        console.log('a user connected')
+      logger.info('a user connected')
 
         socket.on('disconnect', () => {
-          console.log('user disconnected')
+          logger.info('user disconnected')
         })
       },
     )

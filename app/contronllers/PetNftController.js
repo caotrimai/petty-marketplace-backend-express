@@ -1,3 +1,4 @@
+const logger = require('../commons/logger')
 const petNftService = require('../services/PetNftService')
 const {web3} = require('../commons/contract')
 
@@ -10,7 +11,7 @@ class PetNftController {
       const pets = await petNftService.getAll(perPage,  page)
       res.status(200).json(pets)
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({
         error: err,
       })
@@ -23,7 +24,7 @@ class PetNftController {
       const pet = await petNftService.getById(req.params.id)
       res.status(200).json(pet)
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({
         error: err,
       })
@@ -36,7 +37,7 @@ class PetNftController {
       const pet = await petNftService.update(req.params.id, req.body)
       res.status(200).json(pet)
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({
         error: err,
       })
@@ -49,7 +50,7 @@ class PetNftController {
       const pet = await petNftService.delete(req.params.id)
       res.status(200).json(pet)
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({
         error: err,
       })
@@ -69,6 +70,7 @@ class PetNftController {
       await petNftService.create(pet)
       res.status(200).json({message: 'Mint nft success.'})
     } catch (err) {
+      logger.error(err)
       res.status(500).json({error: err.message})
     }
   }
@@ -84,7 +86,7 @@ class PetNftController {
       const pets = await petNftService.getByOwner(owner)
       return res.status(200).json(pets)
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({error: err})
     }
   }
@@ -96,7 +98,7 @@ class PetNftController {
       const petNft = await petNftService.getByTokenId(id)
       res.status(200).json({image: petNft.image})
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({error: err})
     }
   }

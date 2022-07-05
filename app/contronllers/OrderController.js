@@ -1,3 +1,4 @@
+const logger = require('../commons/logger')
 const orderService = require('../services/OrderService');
 
 class OrderController {
@@ -8,7 +9,7 @@ class OrderController {
       const orders = await orderService.getSellingOrders(filter)
       res.status(200).json(orders)
     } catch (err) {
-      console.log(err)
+      logger.error(err)
       res.status(500).json({
         error: err
       })

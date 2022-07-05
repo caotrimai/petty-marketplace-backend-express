@@ -1,3 +1,4 @@
+const logger = require('../commons/logger')
 const PetNftModel = require('../models/PetNftModel')
 const {PettyContract} = require('../commons/contract')
 const pettyEvent = require('../models/PettyEvent')
@@ -48,7 +49,7 @@ class PetNftService {
         from: adminAddress,
       }).on('receipt', async (receipt) => {
         const {tokenId} = receipt.events.Transfer.returnValues
-        console.log(`Mint success: ${tokenId} to ${adminAddress}`)
+        logger.info(`Mint success: ${tokenId} to ${adminAddress}`)
         const newPet = {
           ...petty,
           nft_id: tokenId,
@@ -72,7 +73,6 @@ class PetNftService {
 
   handlePettyEvent = async (eventName, event) => {
     if (!eventName || !event) {
-      console.log('eventName and event is required')
       throw new Error('eventName and event is required')
     }
     switch (eventName) {
