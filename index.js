@@ -48,6 +48,10 @@ app.use(function (err, req, res, next) {
   res.send('Error: ' + err.message)
 })
 
+// log IP address
+require('dns').lookup(require('os').hostname(), function (err, add, fam) {
+  logger.info('IP ADDRESS: ' + add);
+})
 server.listen(port, () => {
   logger.info(`Server is running on port ${port}`)  
 })
