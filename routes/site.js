@@ -4,4 +4,6 @@ const siteController = require('../app/contronllers/SiteController')
 
 router.get('/', siteController.index)
 
+router.get('/connect-db', siteController.connectDb)
+
 module.exports = router;
