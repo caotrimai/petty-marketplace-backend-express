@@ -38,6 +38,7 @@ const logger = createLogger({
   ),
   defaultMeta: {service: 'petty-backend-service'},
   transports: [
+    new winston.transports.Console(),
     dailyRotateTransports,
     dailyErrorRotateTransports,
   ],
