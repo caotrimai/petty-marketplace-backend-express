@@ -1,9 +1,14 @@
-const marketPlaceEvent = require('../models/MarketPlaceEvent')
 const pettyNftService = require('../services/PetNftService')
 const OrderTransaction = require('../models/OrderTransactionModel')
 const serverSocket = require('../contronllers/SocketHandler')
 
 const ADDRESS0 = '0x0000000000000000000000000000000000000000'
+
+const marketPlaceEvent = {
+  ORDER_ADDED: 'OrderAdded',
+  ORDER_MATCHED: 'OrderMatched',
+  ORDER_CANCELED: 'OrderCanceled',
+}
 
 class OrderService {
   PER_PAGE = 10
