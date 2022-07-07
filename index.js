@@ -18,8 +18,8 @@ const server = http.createServer(app)
 const port = utils.normalizePort(process.env.PORT || '8000')
 app.set('port', port)
 
-// app.use(cors({'origin': '*'}))
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+app.use(cors({'origin': '*'}))
+// app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(bodyParser.json())
