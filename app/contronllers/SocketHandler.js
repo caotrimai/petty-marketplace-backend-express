@@ -5,7 +5,7 @@ class SocketHandler {
   constructor (httpServer) {
     this.io = new Server(httpServer, {
       cors: {
-        origin: process.env.CLIENT_DOMAIN,
+        origin: '*',
       },
     })
   }
