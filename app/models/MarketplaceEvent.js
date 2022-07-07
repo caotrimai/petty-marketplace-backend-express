@@ -4,4 +4,6 @@ class MarketplaceEvent {
     ORDER_CANCELED = 'OrderCanceled'
 }
 
-module.exports = new MarketplaceEvent();
+const marketPlaceEvent = new MarketplaceEvent()
+
+module.exports = marketPlaceEvent;
